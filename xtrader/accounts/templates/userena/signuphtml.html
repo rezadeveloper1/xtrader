@@ -1,0 +1,90 @@
+{% load static %}
+
+<!--{% load bootstrap3 %}-->
+<!--{# Load CSS and JavaScript #}-->
+<!--{% bootstrap_css %}-->
+<!--{% bootstrap_javascript %}-->
+<!--{# Display django.contrib.messages as Bootstrap alerts #}-->
+<!--{% bootstrap_messages %}-->
+<head>
+<!--    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"/>
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="/static/js/particles.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stylesignup.css' %}?v=1"/>
+</head>
+{% load i18n %}
+
+{% block title %}ثبت نام{% endblock %}
+
+{% block content %}
+    <div id="particle">
+
+
+    <div id="signup__wrapper" class="mobile_100">
+
+
+    <form action="" method="post" dir="rtl">
+        {% csrf_token %}
+        <fieldset>
+            <div id="header__box">
+                <h1>به رمزثروت خوش آمدید!</h1>
+                <h3>.حساب کاربری خود را بسازید</h3>
+            </div>
+
+            {{ form.non_field_errors }}
+
+            {#  {{ form | striptags }}#}
+            {% for field in form %}
+
+                {% if field.name == 'tos' %}
+                    <p class="checkbox">
+                        <label for="id_{{ field.name }}">{{ field }} {{ field.label }}</label>
+                    </p>
+                {% else %}
+                    <p>
+                        {{ field.label_tag  }}
+                    <span class="errorlist">{{ field.errors | striptags }}</span>
+                        <br>
+
+                        {{ field }}
+                        {% if field.errors %}
+
+
+                            <script>
+                                var d = document.getElementById("id_" + "{{ field.name }}");
+                                d.innerHTML = 'yes00';
+
+                                d.style.borderBottom = '1px solid red';
+                                d.setAttribute('style.border-bottom', '1px solid red');
+                            </script>
+                        {% endif %}
+                    </p>
+                {% endif %}
+                {% if form.non_field_errors %}
+                <script>
+                    var d = document.getElementById("id_password1");
+                    d.style.borderBottom = '1px solid red';
+                    var d1 = document.getElementById("id_password2");
+                    d1.style.borderBottom = '1px solid red';
+                </script>
+            {% endif %}
+            {% endfor %}
+
+        </fieldset>
+        <input class="sign-up__btn" type="submit" value='{% trans "ثبت نام" %}'/>
+        <br><br><br>
+        <div id="bottom-links">
+            <a href="/" style="float: left; margin-left: 1em;">رمزثروت</a>
+            <a href="#" style="float: right; margin-right: -19em;">پشتیبانی | </a>
+            <a href="#" style="float: right; margin-right: -14em;">021-28424613</a>
+        </div>
+    </form>
+{% endblock %}
+</div>
+</div>
+<script src="{% static 'js/particle.js' %}"></script>

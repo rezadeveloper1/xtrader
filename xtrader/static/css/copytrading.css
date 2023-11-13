@@ -1,0 +1,163 @@
+table.dataTable tbody tr.odd {
+  background-color: #4d5068
+}
+
+table.dataTable tbody tr.even {
+  background-color: #1c1f32
+}
+table.dataTable tbody td {
+    padding: 8px 15px !important;
+}
+table.dataTable tbody td {
+    padding: 8px 15px !important;
+}
+#marketwatch-btn {
+    background-position:50% 30%;
+    height: 7vh ;
+}
+
+
+
+
+@import url(./_grid.css);
+#master__wrapper{
+    padding: 1vh;
+}
+
+.about{
+    display: inline;
+}
+body {
+    background-color: #1c1f32;
+    font-family: IRANSans !important;
+}
+h1{
+    font-family: IRANSans !important;
+}
+window{
+    font-family: IRANSans !important;
+}
+.ui.right.aligned.segment{
+    background: #1c1f32;
+    color: white;
+}
+.ui.positive.buttons, .ui.positive.button, .button{
+    font-family: IRANSans;
+    background-color: #00ca9d;
+}
+.ui .segment{
+    background: #1c1f32;
+    /*text-align: right;*/
+    /*float: right;*/
+}
+select {
+    font-family: IRANSans;
+    color: white;
+    direction: rtl;
+    width: 12rem;
+    height: 2.5rem;
+    background-color: #4d5068;
+    border-radius: 0.2rem;
+    border: 1px solid #5c5f77;
+    margin: 0.3rem 0;
+    }
+
+select:after {
+    content:"▼";
+    padding: 12px 8px;
+    position: absolute; right: 10px; top: 0;
+    z-index: 1;
+    text-align: center;
+    width: 10%;
+    height: 100%;
+}
+option{
+    direction: ltr;
+}
+
+input {
+    font-family: IRANSans;
+    color: white;
+    text-align: center;
+    /*direction: rtl;*/
+    width: 12rem;
+    height: 2.5rem;
+    background-color: #4d5068;
+    border-radius: 0.2rem;
+    border: 1px solid #5c5f77;
+    margin: 0.3rem 0;
+    }
+.ui.tabular.menu .active.item{
+    /*background: #1c1f32;*/
+    /*!*border: none;*!*/
+    /*color: white;*/
+}
+
+.ui.top.attached.menu > .item:first-child {
+    border-radius: 4px;
+}
+.ui.tabular.menu .item{
+    background: #1c1f32;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    margin: 0 0.3rem 0.1rem 0;
+    transition: background-color 0.5s ease;
+}
+
+.ui.tabular.menu .item:hover{
+    background: #00ca9d;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    transition: background-color 0.5s ease;
+}
+
+
+.ui.attached.segment{
+    background: #1c1f32;
+    color: white;
+}
+
+.description{
+    display: inline;
+}
+.ui.tabular.menu .left.negative.item{
+    /*background-color: #E35C67;*/
+}
+#master__wrapper{
+    overflow-y: hidden;
+}
+
+.title.row{
+    /*background: #292D48;*/
+}
+.modal {
+    /*main: none; !* Hidden by default *!*/
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+.long-select{
+    width: 33%
+}
+
+.long-select option{
+    text-align: left;
+}
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+th {
+    text-align: right;
+}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}مسابقه{% endblock %}
+{% block headContent %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/copytrading.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="/static/js/jquery.dataTables.js"></script>
+
+
+{% endblock headContent %}
+
+{% load i18n %}
+{% block bodyContent %}
+
+    <div id="nav-bar">
+        <span id="navbar__title">بزودی در رمزثروت مسابقات ترید روی همه نمادهای بایننس برگزار می‌شود</span>
+<!--        <img src="/media/img/champoin.png">-->
+    </div>
+{% endblock bodyContent %}

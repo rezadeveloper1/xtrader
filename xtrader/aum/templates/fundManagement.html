@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"/>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="/static/js/jquery.dataTables.js"></script>
+
+
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+
+    <script src="{% static 'js/aum.js' %}"></script>
+    <title>Asset Management</title>
+</head>
+<body style="direction: rtl;font-family: IRANSans">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">رمزثروت</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#" id="fund"
+                       onclick="changeMenu(this)">صندوق</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="history" onclick="changeMenu(this)">واریز و برداشت</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="customer" onclick="changeMenu(this)">مشتری جدید</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="performance" onclick="changeMenu(this)">عملکرد صندوق</a>
+                </li>
+                <!--                <li class="nav-item">-->
+                <!--                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
+                <!--                </li>-->
+            </ul>
+        </div>
+    </div>
+</nav>
+<br>
+<div class="container" id="funddiv">
+    <div class="container">
+        <div class="row">
+            <div class="col">نام صندوق</div>
+            <div class="col">تعداد واحد</div>
+            <div class="col">ارزش دارایی</div>
+            <div class="col">مدیر صندوق</div>
+            <div class="col">ارزش هر واحد</div>
+            <div class="col">کارمزد صندوق</div>
+            <div class="col">وجه نقد</div>
+            <div class="col">صدور</div>
+            <div class="col">ابطال</div>
+            <div class="col">واریزی</div>
+            <div class="col">برداشتی</div>
+        </div>
+        <div class="row">
+            <div class="col" id="brand">fundName</div>
+            <div class="col" id="units">fundUnits</div>
+            <div class="col" id="aum">fundAum</div>
+            <div class="col" id="manager">fundManager</div>
+            <div class="col" id="nav">fundNav</div>
+            <div class="col" id="fee">fundFee</div>
+            <div class="col" id="cash">fundCash</div>
+            <div class="col" id="issue">fundIssueNAV</div>
+            <div class="col" id="redeem">fundRedeemNAV</div>
+            <div class="col" id="deposit">fundDeposit</div>
+            <div class="col" id="withdraw">fundWithdraw</div>
+        </div>
+    </div>
+    <br>
+    <div class="container" id="investorsContainer">
+    </div>
+
+</div>
+<div class="container" id="historydiv" style="display: none">
+    <br>
+    <h4>تراکنش‌ها</h4>
+    <div class="container" id="historyContainer"></div>
+
+</div>
+<div class="container" id="customerdiv" style="display: none">
+    <br>
+    <h4>مشخصات مشتری</h4>
+    <table>
+        <tr>
+            <td>نام</td>
+            <td>
+                <input id="customer-first_name" type="text" class="form-control" placeholder="first name"
+                       aria-describedby="addon-wrapping">
+            </td>
+        </tr>
+        <tr>
+            <td>نام خانوادگی</td>
+            <td>
+                <input id="customer-last_name" type="text" class="form-control" placeholder="last name"
+                       aria-describedby="addon-wrapping">
+            </td>
+        </tr>
+        <tr>
+            <td>کدملی</td>
+            <td>
+                <input id="customer-nationalCode" type="text" class="form-control" placeholder="nationalCode"
+                       aria-describedby="addon-wrapping">
+            </td>
+        </tr>
+        <tr>
+            <td>موبایل</td>
+            <td>
+                <input id="customer-phoneNumber" type="text" class="form-control" placeholder="phone"
+                       aria-describedby="addon-wrapping">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button style="width:100%" type="button" class="btn btn-success" onclick="createInvestor()">ایجاد
+                </button>
+            </td>
+        </tr>
+    </table>
+
+</div>
+<div class="container" id="performancediv" style="display: none">
+    <div id="container" style="height: 400px; min-width: 310px"></div>
+    <br>
+    <div class="container" id="performanceContainer"></div>
+
+</div>
+
+</body>
+</html>
