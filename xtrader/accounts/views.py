@@ -33,7 +33,6 @@ from finance import notification
 import threading
 import json
 
-
 class ExtraContextTemplateView(TemplateView):
     """ Add extra context to a simple template view """
     extra_context = None
@@ -256,7 +255,51 @@ def activate(request, activation_key,
         return ExtraContextTemplateView.as_view(template_name=template_name,
                                                 extra_context=extra_context)(request)
 
+def activate_pending(
+    request,
+    username,
+    template_name="userena/activate_pending.html",
+    extra_context=None,
+):
+    """
+    Checks if the account is not active, if so, returns the
+    activation pending template.  This view is meant to take
+    precedent over the ``disabled_account`` view unless we know that the
+    account was disabled after completion.
 
+    :param username:
+        String defining the username of the user that made the action.
+
+    :param template_name:
+        String defining the name of the template to use. Defaults to
+        ``userena/activate_pending.html``.
+
+    **Keyword arguments**
+
+    ``extra_context``
+        A dictionary containing extra variables that should be passed to the
+        rendered template. The ``account`` key is always the ``User``
+        that completed the action.
+
+    """
+    user = get_object_or_404(
+        get_user_model(), username__iexact=username, is_active=False
+    )
+
+    # If we know that the activation process was completed, but the
+    # user is now not active, it is safe to assume that the user was
+    # actually disabled after completion of activation.  In that
+    # case, we will redirect to ``userena_disabled``.
+    if user.userena_signup.activation_completed:
+        return redirect(
+            reverse("userena_disabled", kwargs={"username": user.username})
+        )
+
+    if not extra_context:
+        extra_context = dict()
+    return ExtraContextTemplateView.as_view(
+        template_name=template_name, extra_context=extra_context
+    )(request)
 @secure_required
 def activate_retry(request, activation_key,
                    template_name='userena/activate_retry_success.html',
@@ -537,11 +580,14 @@ def landing(request, auth_form=AuthenticationForm,
 
 
 @secure_required
-@csrf_exempt
-def signin(request, auth_form=AuthenticationForm,
-           template_name='userena/signin_form.html',
-           redirect_field_name=REDIRECT_FIELD_NAME,
-           redirect_signin_function=signin_redirect, extra_context=None):
+def signin(
+        request,
+        auth_form=AuthenticationForm,
+        template_name='userena/signin_form.html',
+        redirect_field_name=REDIRECT_FIELD_NAME,
+        redirect_signin_function=signin_redirect,
+        extra_context=None
+):
     """
     Signin using email or username with password.
 
@@ -585,55 +631,80 @@ def signin(request, auth_form=AuthenticationForm,
     form = auth_form()
 
     if request.method == 'POST':
-        info = json.loads(request.body.decode())
-        info['identification'] = info['identification'].lower()
-        form = auth_form(info, request.FILES)
+        form = auth_form(request.POST, request.FILES)
         if form.is_valid():
-            identification, password, remember_me = (form.cleaned_data['identification'],
-                                                     form.cleaned_data['password'],
-                                                     form.cleaned_data['remember_me'])
-            user = authenticate(identification=identification,
-                                password=password)
+            identification, password, remember_me = (
+                form.cleaned_data["identification"],
+                form.cleaned_data["password"],
+                form.cleaned_data["remember_me"],
+            )
+            user = authenticate(
+                identification=identification, password=password
+            )
             if user.is_active:
                 login(request, user)
                 if remember_me:
-                    request.session.set_expiry(userena_settings.USERENA_REMEMBER_ME_DAYS[1] * 86400)
+                    request.session.set_expiry(
+                        userena_settings.USERENA_REMEMBER_ME_DAYS[1] * 86400
+                    )
                 else:
                     request.session.set_expiry(0)
 
                 if userena_settings.USERENA_USE_MESSAGES:
-                    messages.success(request, _('You have been signed in.'),
-                                     fail_silently=True)
+                    messages.success(
+                        request,
+                        _("You have been signed in."),
+                        fail_silently=True,
+                    )
 
                 # send a signal that a user has signed in
                 userena_signals.account_signin.send(sender=None, user=user)
                 # Whereto now?
-                # redirect_to = redirect_signin_function(
-                #     request.GET.get(redirect_field_name,
-                #                     request.POST.get(redirect_field_name)), user)
-                # return HttpResponseRedirect(redirect_to)
-                # data = form.cleaned_data
-                return JsonResponse({})
+                redirect_to = redirect_signin_function(
+                    request.GET.get(
+                        redirect_field_name,
+                        request.POST.get(redirect_field_name),
+                    ),
+                    user,
+                )
+                return HttpResponseRedirect(redirect_to)
             else:
-                return JsonResponse({"error": "your account is not activated, check your email."}, status=400)
-        data = form.errors.as_json()
-        return JsonResponse(json.loads(data), status=400)
-        # else:
-        #         return redirect(reverse('accounts:userena_disabled',
-        #                                 kwargs={'username': user.username}))
+                # If the user is inactive, despite completing the
+                # activation process, show the 'Account disabled'
+                # page.  Otherwise, show the 'Activation pending'
+                # page to encourage activation.
+                if user.userena_signup.activation_completed:
+                    return redirect(
+                        reverse(
+                            "userena_disabled",
+                            kwargs={"username": user.username},
+                        )
+                    )
+                else:
+                    return redirect(
+                        reverse(
+                            "userena_activate_pending",
+                            kwargs={"username": user.username},
+                        )
+                    )
 
-    if not extra_context: extra_context = dict()
-    extra_context.update({
-        'form': form,
-        'next': request.GET.get(redirect_field_name,
-                                request.POST.get(redirect_field_name)),
-    })
-    return ExtraContextTemplateView.as_view(template_name=template_name,
-                                            extra_context=extra_context)(request)
+    if not extra_context:
+        extra_context = dict()
+    extra_context.update(
+        {
+            "form": form,
+            "next": request.GET.get(
+                redirect_field_name, request.POST.get(redirect_field_name)
+            ),
+        }
+    )
+    return ExtraContextTemplateView.as_view(
+        template_name=template_name, extra_context=extra_context
+    )(request)
 
 
 @secure_required
-def signout(request, next_page=userena_settings.USERENA_REDIRECT_ON_SIGNOUT,
+def SignoutView(request, next_page=userena_settings.USERENA_REDIRECT_ON_SIGNOUT,
             template_name='userena/signout.html', *args, **kwargs):
     """
     Signs out the user and adds a success message ``You have been signed

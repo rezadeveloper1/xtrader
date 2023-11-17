@@ -32,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.environ.get('DEBUG', 0)))
+DEBUG = bool(int(os.environ.get('DEBUG', 1)))
 
 ALLOWED_HOSTS = []
 ALLOWED_HOSTS.extend(
@@ -41,18 +41,22 @@ ALLOWED_HOSTS.extend(
         os.environ.get('ALLOWED_HOSTS', '').split(','),
     )
 )
+# Settings used by Userena
+LOGIN_REDIRECT_URL = "/accounts/%(username)s/"
+LOGIN_URL = "/accounts/signin/"
+LOGOUT_URL = "/accounts/signout/"
+AUTH_PROFILE_MODULE = 'accounts.Profile'
+USERENA_DISABLE_PROFILE_LIST = True
+USERENA_MUGSHOT_SIZE = 140
+
+
+
 USERENA_REDIRECT_ON_SIGNOUT = getattr(settings,
                                       'USERENA_REDIRECT_ON_SIGNOUT',
                                       '/accounts/signin')
 USERENA_SIGNIN_REDIRECT_URL = getattr(settings,
                                       'USERENA_SIGNIN_REDIRECT_URL',
-                                      '/backtest')
-LOGIN_URL = '/accounts/signin/'
-LOGOUT_URL = '/accounts/signout/'
-ANONYMOUS_USER_NAME = 'anonymous_user'
-
-AUTH_PROFILE_MODULE = 'accounts.Profile'
-
+                                      '/robots')
 # Application definition
 
 INSTALLED_APPS = [
@@ -186,8 +190,8 @@ AUTHENTICATION_BACKENDS = (
 # PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 # STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
-STATIC_URL = '/static/static/'
-MEDIA_URL = '/static/media/'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 #STATICFILES_DIRS = (
 #    os.path.join(BASE_DIR, 'static'),
 #)
@@ -236,3 +240,6 @@ LOGGING = {
         },
     },
 }
+
+ANONYMOUS_USER_NAME = "AnonymousUser"
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

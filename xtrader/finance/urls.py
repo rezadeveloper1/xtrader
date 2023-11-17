@@ -42,4 +42,3 @@ urlpatterns = [
     re_path(r'^testAPI', views.testAPI, name='testAPI'),
     re_path(r'^telegram/webhook', views.telegram_webhook, name='telegram_webhook'),
 ]
-
