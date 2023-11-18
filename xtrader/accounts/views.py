@@ -4,7 +4,10 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib.auth import authenticate, login, logout, REDIRECT_FIELD_NAME
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.views import LogoutView as logout
+#from django.contrib.auth.views import LogoutView as logout
+from django.contrib.auth.views import LogoutView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.contrib import messages
@@ -703,9 +706,7 @@ def signin(
     )(request)
 
 
-@secure_required
-def SignoutView(request, next_page=userena_settings.USERENA_REDIRECT_ON_SIGNOUT,
-            template_name='userena/signout.html', *args, **kwargs):
+class SignoutView(LogoutView, SuccessMessageMixin):
     """
     Signs out the user and adds a success message ``You have been signed
     out.`` If next_page is defined you will be redirected to the URI. If
@@ -719,12 +720,25 @@ def SignoutView(request, next_page=userena_settings.USERENA_REDIRECT_ON_SIGNOUT,
         ``userena/signout.html``.
 
     """
-    if request.user.is_authenticated() and userena_settings.USERENA_USE_MESSAGES:  # pragma: no cover
-        messages.success(request, _('You have been signed out.'), fail_silently=True)
-    userena_signals.account_signout.send(sender=None, user=request.user)
-    Signout(request)
-    return JsonResponse({})
-    # return Signout(request, next_page, template_name, *args, **kwargs)
+
+    template_name = "userena/signout.html"
+    next_page = userena_settings.USERENA_REDIRECT_ON_SIGNOUT
+
+    def get_success_message(self, cleaned_data):
+        authenticated = self.request.user.is_authenticated
+
+        if (
+            authenticated and userena_settings.USERENA_USE_MESSAGES
+        ):  # pragma: no cover
+            return _("You have been signed out.")
+        else:
+            return ""
+
+    @method_decorator(secure_required)
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        userena_signals.account_signout.send(sender=None, user=request.user)
+        return response
 
 
 @secure_required
@@ -1093,26 +1107,21 @@ def signupsample(request, signup_form=SignupFormExtra,
 
     # If no usernames are wanted and the default form is used, fallback to the
     # default form that doesn't display to enter the username.
-    if userena_settings.USERENA_WITHOUT_USERNAMES and (signup_form == SignupFormExtra):
+    if userena_settings.USERENA_WITHOUT_USERNAMES and (
+            signup_form == SignupFormExtra
+    ):
         signup_form = SignupFormOnlyEmail
 
     form = signup_form()
 
-    # for field in form:
-    #     print(field)
-
     if request.method == 'POST':
-        # info = {key: value[0] for key, value in dict(request.POST).items()}
-        info = json.loads(request.body.decode())
-        info['email'] = info['email'].lower()
-        info['username'] = info['username'].lower()
-        form = signup_form(info, request.FILES)
+        form = signup_form(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
 
             # Send the signup complete signal
-            userena_signals.signup_complete.send(sender=None,
-                                                 user=user)
+            userena_signals.signup_complete.send(sender=None, user=user)
+
             referred_by_id = int(request.session.get('ref_id', -1))
             if referred_by_id > -1:
                 referred_by = Profile.objects.get(pk=referred_by_id)
@@ -1127,45 +1136,33 @@ def signupsample(request, signup_form=SignupFormExtra,
             if success_url:
                 redirect_to = success_url
             else:
-                redirect_to = reverse('accounts:userena_signup_complete',
-                                      kwargs={'username': user.username})
+                redirect_to = reverse(
+                    "accounts:userena_signup_complete",
+                    kwargs={"username": user.username},
+                )
 
             # A new signed user should logout the old one.
-            if request.user.is_authenticated():
+            authenticated = request.user.is_authenticated
+
+            if authenticated:
                 logout(request)
 
-            if (userena_settings.USERENA_SIGNIN_AFTER_SIGNUP and
-                    not userena_settings.USERENA_ACTIVATION_REQUIRED):
-                user = authenticate(identification=user.email, check_password=False)
+            if (
+                    userena_settings.USERENA_SIGNIN_AFTER_SIGNUP
+                    and not userena_settings.USERENA_ACTIVATION_REQUIRED
+            ):
+                user = authenticate(
+                    identification=user.email, check_password=False
+                )
                 login(request, user)
 
-            # return redirect(redirect_to)
-            data = form.cleaned_data
-            return JsonResponse(data)
-        else:
-            data = form.errors.as_json()
-            return JsonResponse(json.loads(data), status=400)
-    if not extra_context: extra_context = dict()
-    myorder = [
-        'first_name',
-        'last_name',
-        'username',
-        'cellPhone',
-        'email',
-        'password1',
-        'password2',
-    ]
-
-    from collections import OrderedDict
-
-    newform = OrderedDict()
-    for k in myorder:
-        newform[k] = form[k]
-    form.fields = newform
-    extra_context['form'] = form
-    return ExtraContextTemplateView.as_view(template_name=template_name,
-                                            extra_context=extra_context)(request)
-
+            return redirect(redirect_to)
+    if not extra_context:
+        extra_context = dict()
+    extra_context["form"] = form
+    return ExtraContextTemplateView.as_view(
+        template_name=template_name, extra_context=extra_context
+    )(request)
 
 def settings(request):
     return render(request, 'settings.html', {**get_user(request)})

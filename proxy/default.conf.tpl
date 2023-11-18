@@ -1,6 +1,10 @@
 server {
     listen ${LISTEN_PORT};
 
+    location /media/ {
+        alias /home/app/mediafiles/;
+    }
+
     location /static/ {
         alias /home/app/staticfiles/;
     }

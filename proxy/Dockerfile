@@ -1,5 +1,5 @@
 FROM nginxinc/nginx-unprivileged:1-alpine
-LABEL maintainer="dc.ramzservat.com"
+LABEL maintainer="ramzservat.com"
 
 COPY ./default.conf.tpl /etc/nginx/default.conf.tpl
 COPY ./uwsgi_params /etc/nginx/uwsgi_params
@@ -11,13 +11,14 @@ ENV APP_PORT=9000
 
 USER root
 
-RUN mkdir -p /vol/static && \
-    chmod 755 /vol/static && \
+RUN mkdir -p /vol/static /vol/media && \
+    chmod 755 /vol/static /vol/media && \
     touch /etc/nginx/conf.d/default.conf && \
     chown nginx:nginx /etc/nginx/conf.d/default.conf && \
     chmod +x /run.sh
 
 VOLUME /vol/static
+VOLUME /vol/media
 
 USER nginx
 

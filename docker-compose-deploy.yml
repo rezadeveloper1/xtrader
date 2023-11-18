@@ -9,6 +9,7 @@ services:
       # - static-data:/vol/web
       - ./logs/uwsgi:/var/log/uwsgi
       - ./xtrader/static:/xtrader/static
+      - ./xtrader/media:/xtrader/media
     environment:
       - DB_HOST=db
       - DB_NAME=${DB_NAME}
@@ -40,6 +41,7 @@ services:
     volumes:
       # - static-data:/vol/static
       - ./xtrader/static:/home/app/staticfiles
+      - ./xtrader/media:/home/app/mediafiles
 
 volumes:
   postgres-data:
