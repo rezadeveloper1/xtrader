@@ -7,8 +7,10 @@ services:
       dockerfile: Dockerfile
     command: >
       sh -c "python manage.py wait_for_db &&
-             python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+            python manage.py collectstatic --noinput &&
+            python manage.py makemigrations &&
+            python manage.py migrate &&
+             uwsgi --socket :9000 --module xtrader.wsgi --py-autoreload 1"
     ports:
       - 8000:8000
     volumes:
@@ -21,11 +23,34 @@ services:
       - DB_NAME=devdb
       - DB_USER=devuser
       - DB_PASS=changeme
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_EMAIL=admin@example.com
+      - DJANGO_SUPERUSER_PASSWORD=adminpassword
     depends_on:
       - db
+
   db:
     image: postgres:13
     environment:
       - POSTGRES_DB=devdb
       - POSTGRES_USER=devuser
       - POSTGRES_PASSWORD=changeme
+
+  proxy:
+    build:
+      context: ./proxy
+    restart: always
+    depends_on:
+      - app
+    ports:
+      - 80:80
+    volumes:
+      - ./xtrader/static:/home/app/staticfiles
+      - ./xtrader/media:/home/app/mediafiles
+    environment:
+      - LISTEN_PORT=80
+      - APP_HOST=app
+      - APP_PORT=9000
+
+volumes:
+  postgres-data:

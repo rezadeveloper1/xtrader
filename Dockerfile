@@ -1,6 +1,5 @@
-# Use the official Python image
 FROM python:3.9
-LABEL maintainer="dc.ramzservat.com"
+LABEL maintainer="ramzservat.com"
 
 # Set the working directory
 WORKDIR /xtrader
@@ -38,6 +37,7 @@ RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
 
 # Copy the requirements file and project code
 COPY ./requirements.txt /xtrader/
+COPY ./scripts /scripts/
 
 # Create and activate a virtual environment
 RUN python -m venv /py && \
@@ -51,19 +51,17 @@ RUN apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-
 COPY ./xtrader /xtrader/
 COPY ./scripts /scripts
 
 # Create a non-root user and set up directories
-RUN adduser --disabled-password --no-create-home xtrader && \
-    mkdir -p /vol/web/static /vol/web/media && \
-    chown -R xtrader:xtrader /xtrader /vol && \
+RUN mkdir -p /vol/web/static /vol/web/media && \
+    chown -R root:root /xtrader /vol && \
     chmod -R 755 /vol && \
     chmod -R +x /scripts
 
 # Switch to the non-root user
-USER xtrader
+USER root
 
 # Expose the port
 EXPOSE 9000
