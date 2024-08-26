@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 # xtrader
+=======
+# xtrader
+>>>>>>> master

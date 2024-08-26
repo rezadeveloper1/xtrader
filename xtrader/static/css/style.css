@@ -1,0 +1,177 @@
+@font-face {
+	font-family: IRANSans;
+	font-style: normal;
+	font-weight: bold;
+	src: url('../fonts/eot/IRANSansWeb_Bold.eot');
+	src: url('../fonts/eot/IRANSansWeb_Bold.eot?#iefix') format('embedded-opentype'),  /* IE6-8 */
+		 url('../fonts/woff2/IRANSansWeb_Bold.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('../fonts/woff/IRANSansWeb_Bold.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+		 url('../fonts/ttf/IRANSansWeb_Bold.ttf') format('truetype');
+}
+@font-face {
+	font-family: IRANSans;
+	font-style: normal;
+	font-weight: 500;
+	src: url('../fonts/eot/IRANSansWeb_Medium.eot');
+	src: url('../fonts/eot/IRANSansWeb_Medium.eot?#iefix') format('embedded-opentype'),  /* IE6-8 */
+		 url('../fonts/woff2/IRANSansWeb_Medium.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('../fonts/woff/IRANSansWeb_Medium.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+		 url('../fonts/ttf/IRANSansWeb_Medium.ttf') format('truetype');
+}
+@font-face {
+	font-family: IRANSans;
+	font-style: normal;
+	font-weight: 300;
+	src: url('../fonts/eot/IRANSansWeb_Light.eot');
+	src: url('../fonts/eot/IRANSansWeb_Light.eot?#iefix') format('embedded-opentype'),  /* IE6-8 */
+		 url('../fonts/woff2/IRANSansWeb_Light.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('../fonts/woff/IRANSansWeb_Light.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+		 url('../fonts/ttf/IRANSansWeb_Light.ttf') format('truetype');
+}
+@font-face {
+	font-family: IRANSans;
+	font-style: normal;
+	font-weight: 200;
+	src: url('../fonts/eot/IRANSansWeb_UltraLight.eot');
+	src: url('../fonts/eot/IRANSansWeb_UltraLight.eot?#iefix') format('embedded-opentype'),  /* IE6-8 */
+		 url('../fonts/woff2/IRANSansWeb_UltraLight.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('../fonts/woff/IRANSansWeb_UltraLight.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+		 url('../fonts/ttf/IRANSansWeb_UltraLight.ttf') format('truetype');
+}
+@font-face {
+	font-family: IRANSans;
+	font-style: normal;
+	font-weight: normal;
+	src: url('../fonts/eot/IRANSansWeb.eot');
+	src: url('../fonts/eot/IRANSansWeb.eot?#iefix') format('embedded-opentype'),  /* IE6-8 */
+		 url('../fonts/woff2/IRANSansWeb.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
+		 url('../fonts/woff/IRANSansWeb.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+		 url('../fonts/ttf/IRANSansWeb.ttf') format('truetype');
+}
+
+
+
+#particle {
+    background: #05648b;
+    background: linear-gradient(#05648b 0%, #1a1c41 100%);
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+}
+
+#login__wrapper {
+    background: #fff;
+    border-radius: 0.5em;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    text-align: right;
+    width: 22em;
+    height : 20em;
+    padding: 2em;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    font-family: IRANSans;
+
+
+}
+@media only screen and (max-width: 600px) {
+    .mobile_100 {
+      width: 100vw !important;
+    }
+}
+#login__wrapper a {
+    text-decoration: none;
+}
+
+
+.form-group input {
+    border: none;
+    border-bottom: 1px solid #d1d1d1;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-radius: 0;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-bottom: 1px solid #4a90e2;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.form-group input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+.form-group label {
+    margin: 0;
+}
+
+.sign-in__btn {
+    background: #21ce99;
+    padding: 0.3em 2em;
+    font: 1.2em IRANSans;
+    font-weight: 400;
+    color: white;
+    display: block;
+    float: right;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.5s ease;
+}
+
+.sign-in__btn:hover {
+    color: white;
+    cursor: pointer;
+    background: #12ba87;
+    transition: background-color 0.5s ease;
+}
+
+.forgot-password__link {
+    font-size: 0.8em;
+    position: relative;
+    display: inline-block;
+    margin: 1em 2.2em 0 0;
+}
+
+#error__username {
+    color: #f76060;
+    display: none;
+    position: absolute;
+    width:12em;
+    right: 6.5em;
+}
+
+#error__password {
+    color: #f76060;
+    display: none;
+    position: absolute;
+    width:12em;
+    right: 5.9em;
+    top: 6.9em;
+}
+
+#box_add_info {
+    width: 100%;
+    height: 2rem;
+    padding:0;
+    left: 0;
+    right: 0;
+    margin-top: 1.5rem;
+    font-size: 80%;
+ }
+#box_add_info a{
+    color: white;
+    text-decoration: none;
+    float: right;
+    transition: color 0.5s ease;
+}
+
+#box_add_info a:hover{
+    color: #12ba87;
+    transition: color 0.5s ease;
+}

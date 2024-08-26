@@ -1,0 +1,21 @@
+{% load i18n %}{% autoescape off %}
+<html>
+  <body>
+    {% if not without_usernames %}<p>{{  user.username  }}عزیز</p>{% endif %}
+    <p>
+      درخواستی برای تغییر ایمیل برای شما در سایت {{ site.name }} وجود دارد
+    </p>
+
+    <p>
+      برای شما در این ایمیل {{ new_email }} لینک تاییده وجود دارد
+    </p>
+
+    <p>با تشکر </p>
+
+    <p>
+      <br />
+      {{ site.name }}
+    </p>
+  </body>
+</html>
+{% endautoescape %}

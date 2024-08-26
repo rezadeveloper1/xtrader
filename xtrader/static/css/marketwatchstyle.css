@@ -1,0 +1,104 @@
+#filters-parent{
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    /*top: 2%;*/
+    background: #1c1f32;
+    margin: 0 auto;
+    left: 0; right: 0;
+    width:99%;
+    border-radius: 0.2rem;
+    border: 1px solid #323651;
+    padding: 1rem 0;
+
+
+}
+#filters-place{
+    display:inline;
+    text-align: center;
+    margin: 0 auto;
+    left: 0; right: 0;
+    width:180%;
+}
+
+.filter-name{
+    padding-right:0.5rem;
+    width: 12rem;
+}
+
+select {
+    font-family: IRANSans;
+    color: white;
+    direction: rtl;
+    width: 12rem;
+    height: 2.5rem;
+    background-color: #4d5068;
+    border-radius: 0.2rem;
+    border: 1px solid #5c5f77;
+    margin: 0.3rem 0;
+    }
+
+select option {
+    margin: 40px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+
+.divTableBody{
+    background: #1c1f32;
+    width:99%;
+    margin: 0 auto;
+    overflow-x: scroll !important;
+    position:relative;
+    margin-top: 0%;
+    }
+
+.divTableCell {
+
+    height:3rem;
+    padding: 0.8rem 0.8rem;
+}
+
+
+
+.main-nav-scrolled {
+  position: fixed;
+  width: 100%;
+  top: 0;
+}
+.main-nav,
+.main {
+  position: relative;
+}
+header {
+  height: 300px;
+  padding-top: 50px;
+  background: #f07057;
+}
+
+#marketwatch-btn {
+    background-position:50% 30%;
+    height: 7vh ;
+}
+
+#refresh-btn {
+    background-image: url(/media/icons/refresh.svg);
+    margin:0.75em 3px 5px 3px;
+}
+#align-btn{
+    background-image: url(/media/icons/group.svg);
+    margin:0.75em auto;
+}
+
+.other-btns {
+    background:#1c1f32 no-repeat center;
+    background-size: 2.75vh;
+    border-radius: 3px;
+    width: 4vh;
+    height: 4vh;
+    margin-right: 0.8vh;
+    cursor: pointer;
+    margin:0.75em auto;
+}

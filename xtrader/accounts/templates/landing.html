@@ -1,0 +1,89 @@
+{% load static %}
+<!--{% load bootstrap3 %}-->
+
+<!--{# Load CSS and JavaScript #}-->
+<!--{% bootstrap_css %}-->
+<!--{% bootstrap_javascript %}-->
+
+<!--{# Display django.contrib.messages as Bootstrap alerts #}-->
+<!--{% bootstrap_messages %}-->
+
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'js/bootstrap.min.js' %}"/>
+    <script src="/static/js/particles.min.js"></script>
+</head>
+
+
+{% load i18n %}
+
+
+<div id="particle">
+    <div id="login__wrapper" class="mobile_100">
+
+        <p id="error__username">.نام کاربری اشتباه می باشد -</p>
+        <p id="error__password">.رمز عبور اشتباه است -</p>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <fieldset>
+
+                {% for field in form %}
+
+                    {% if field.name == 'remember_me' %}
+
+                    {% else %}
+                        <div class="form-group">
+                            <label for="{{ field.name }}">{{ field.label }}</label>
+
+
+                            <input type="{{ field.name }}" class="form-control"
+                                   name="{{ field.name }}"
+                                   id="id_{{ field.name }}"/>
+
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% if errors.type == 'username' %}
+                    <script>
+                        document.getElementById("error__username").style.display = "inline-block";
+                    </script>
+
+                {% elif errors.type == 'pass' %}
+                    <script>
+                        document.getElementById("error__password").style.display = "inline-block";
+                    </script>
+                {% endif %}
+            </fieldset>
+
+            <button class="btn btn-default sign-in__btn" type="submit" style="display: inline-block" value="ورود">
+                ورود
+            </button>
+            <br><br>
+            <p class="forgot-password forgot-password__link">
+                <a style="color: #4a90e2;position: relative;top: -0.9em; right: -2.2rem;" class="link"
+                   href='{% url "accounts:userena_password_reset" %}'>
+                رمز عبور خود را فراموش کردید؟
+                               </a></p> <br>
+            <p class="forgot-password forgot-password__link">
+                <a style="color: #4a90e2;position: relative;top: -0.9em; right: -2.2rem;" class="link"
+                   href='{% url "accounts:userena_signup" %}'>ثبت نام نکرده اید؟</a></p>
+            {% if next %}<input type="hidden" name="next" value="{{ next }}"/>{% endif %}
+            <br>
+            <br>
+            <div id="box_add_info">
+                <a href="" style="margin-right: -2rem;"> | پشتیبانی</a>
+<!--                <a href="" style="margin-right: 0.6rem;">پشتیبانی |</a>-->
+                <a href="" style="margin-right: 0.6rem;">021-28424613</a>
+                <a href="/" style="float: left; margin-left: -2rem;">رمزثروت</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script src="{% static 'js/particle.js' %}">
+</script>
