@@ -6,7 +6,7 @@ LABEL maintainer="dc.ramzservat.com"
 WORKDIR /xtrader
 
 # Set environment variables
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 ENV PATH="/scripts:/py/bin:$PATH"
 
 # Install system dependencies
@@ -27,14 +27,11 @@ RUN apt-get update && \
     less
 
 # Download and build TA-Lib
-RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
-    tar -xvzf ta-lib-0.4.0-src.tar.gz && \
-    cd ta-lib/ && \
-    ./configure --prefix=/usr --build=aarch64-unknown-linux-gnu && \
-    make && \
-    make install && \
-    cd .. && \
-    rm -rf ta-lib ta-lib-0.4.0-src.tar.gz
+RUN wget https://github.com/ta-lib/ta-lib/releases/download/v0.6.2/ta-lib_0.6.2_amd64.deb && \ 
+    dpkg -i ta-lib_0.6.2_amd64.deb && \
+    rm ta-lib_0.6.2_amd64.deb
+RUN pip install ta-lib
+
 
 # Copy the requirements file and project code
 COPY ./requirements.txt /xtrader/
@@ -44,7 +41,7 @@ RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip
 
 # Install project dependencies
-RUN /py/bin/pip install -r /xtrader/requirements.txt
+RUN /py/bin/pip install --no-cache-dir --progress-bar on --default-timeout=2000 --retries=10 -r /xtrader/requirements.txt
 
 # Clean up unnecessary packages
 RUN apt-get autoremove -y && \
@@ -56,11 +53,11 @@ COPY ./xtrader /xtrader/
 COPY ./scripts /scripts
 
 # Create a non-root user and set up directories
-RUN adduser --disabled-password --no-create-home xtrader && \
-    mkdir -p /vol/web/static /vol/web/media && \
-    chown -R xtrader:xtrader /xtrader /vol && \
-    chmod -R 755 /vol && \
-    chmod -R +x /scripts
+RUN adduser --disabled-password --no-create-home xtrader
+RUN mkdir -p /vol/web/static /vol/web/media
+RUN chown -R xtrader:xtrader /xtrader /vol
+RUN chmod -R 755 /vol
+RUN chmod -R +x /scripts
 
 # Switch to the non-root user
 USER xtrader
